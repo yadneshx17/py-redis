@@ -1,19 +1,8 @@
 import socket
-from collections import namedtuple
 
-from resp_parser import ProtocolHandler
-
-
-# Exceptions
-class Disconnect(Exception):
-    pass
-
-
-class CommandError(Exception):
-    pass
-
-
-Error = namedtuple("Error", ("messages",))
+from commands import Commands
+from exceptions import CommandError, Disconnect, Error
+from protocol import Decoder, Encoder
 
 
 class Server:
@@ -22,9 +11,11 @@ class Server:
         self.port = port
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        self.protocol_handler = ProtocolHandler()
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.protocol_decoder = Decoder()
+        self.protocol_encoder = Encoder()
         self._kv = {}  # key-value store
+        self._commands = Commands(self._kv)
 
     def start(self):
         self.socket.bind((self.host, self.port))
@@ -39,22 +30,30 @@ class Server:
             self.connection_handler(conn, addr)
 
     def connection_handler(self, conn, addr):
-        socket_file = conn.makefile("rwb")
+        
+        # Converts the socket to a file-like object for reading/writing
+        socket_file = conn.makefile(mode="rwb")
 
         while True:
             try:
-                data = socket_file.read()
+                data = self.protocol_decoder.handle_request(socket_file)
                 if not data:
-                    break
+                    raise CommandError("Missing command")
 
-                resp = self.protocol_handler.handle_request(data)
             except Disconnect:
                 break
 
+            try:
+                resp = self._commands.get_response(data)
             except CommandError as exc:
                 resp = Error(exc.args[0])
 
-            self.protocol_handler.write_response(socket_file, resp)
+            self.protocol_encoder.write_response(socket_file, resp)
 
-    def get_response(self, data):
-        pass
+        socket_file.close()
+        conn.close()
+
+    
+if __name__ == "__main__":
+    server = Server()
+    server.start()

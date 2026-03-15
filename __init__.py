@@ -1,6 +1,16 @@
 from .client import Client
 from .commands import Commands
-from .resp_parser import ProtocolHandler
+from .exceptions import CommandError, Disconnect, Error
 from .server import Server
+from .protocol import Decoder, Encoder
 
-__all__ = ["Client", "Commands", "ProtocolHandler", "Server"]
+__all__ = [
+    "Client",
+    "Commands",
+    "Server",
+    "Error",
+    "Disconnect",
+    "CommandError",
+    "Decoder",
+    "Encoder",
+]
