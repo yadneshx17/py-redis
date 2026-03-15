@@ -1,6 +1,6 @@
-# Mini-Redis
+# py-Redis
 
-Mini-Redis is a lightweight, simplified implementation of a Redis-like in-memory key-value data store written in Python. It supports basic operations over a custom RESP (REdis Serialization Protocol) implementation.
+py-Redis is a lightweight, simplified implementation of a Redis-like in-memory key-value data store written in Python. It supports basic operations over a custom RESP (REdis Serialization Protocol) implementation.
 
 ## Features
 
