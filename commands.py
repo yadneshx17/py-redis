@@ -51,18 +51,22 @@ class Commands:
 
     # bulk operations
     def mget(self, *keys) -> List[Optional[str]]:
-        if len(keys) == 1 and isinstance(keys[0], list):
+        if len(keys) == 1 and isinstance(
+            keys[0], list
+        ):  # checks if list passed as single argument
             keys = keys[0]
         return [self._kv.get(key) for key in keys]
 
     def mset(self, *items) -> Optional[str]:
-        if len(items) == 1 and isinstance(items[0], dict):
+        if len(items) == 1 and isinstance(
+            items[0], dict
+        ):  # checks if dict passed as single argument
             for k, v in items[0].items():
-                self._kv[k] = v
+                self._kv[k] = v  # sets key-value pairs from the dict into list
             return "OK"
         if len(items) % 2 != 0:
             raise CommandError("wrong number of arguments for MSET")
         it = iter(items)
-        for k, v in zip(it, it):    
+        for k, v in zip(it, it):
             self._kv[k] = v
         return "OK"
