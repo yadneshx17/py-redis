@@ -18,6 +18,22 @@ The following commands are currently implemented:
 - `MSET key value [key value ...]`: Sets multiple keys to multiple values. Also accepts a dictionary in the Python client.
 - `MGET key [key ...]`: Gets values for multiple keys. Also accepts a list in the Python client.
 
+## Folder Structure
+
+```text
+mini-redis/
+├── protocol/
+│   ├── decoder.py       # Deserializes RESP responses into Python objects
+│   ├── encoder.py       # Serializes Python objects into RESP protocol format
+│   └── __init__.py
+├── benchmark.py         # Benchmarking script for SET/GET vs MSET/MGET
+├── client.py            # Python client implementation for py-Redis
+├── commands.py          # Command execution logic (SET, GET, MSET, MGET, etc.)
+├── exceptions.py        # Custom exceptions for the protocol
+├── server.py            # Asyncio based server implementation
+└── README.md
+```
+
 ## Usage
 
 ### Starting the Server
