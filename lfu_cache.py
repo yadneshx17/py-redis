@@ -14,6 +14,10 @@ class ValueNode:
         self.prev = None
         self.freq_node = None  # Back-pointer to parent
 
+# Exceptions
+
+class NotFoundExceptions(Exception)
+    pass
 
 class LFUCache:
     def __init__(self, capacity: int):
@@ -98,3 +102,26 @@ class LFUCache:
         # Get/Create new freq and add to head
         new_freq_node = self._get_or_create_freq
         self._add_to_freq_head(node, new_freq_node)
+
+    # Dict interface
+    def __setitem__(self, key, value):
+        pass
+
+    def __getitem__(self, cls,  key):
+        pass
+
+    def _delitem_(self, key):
+        pass
+
+    # EVICTION
+    def _evict_lfu(self):
+        pass
+
+    def __contains__(self, cls, key):
+        return cls.__getitem__(key)
+
+    def __len__(self, key):
+        pass
+
+    def clear(self):
+        self._hashtable.clear()
