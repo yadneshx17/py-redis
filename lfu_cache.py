@@ -15,11 +15,6 @@ class ValueNode:
         self.freq_node = None  # Back-pointer to parent
 
 
-# Exceptions
-class NotFoundExceptions(Exception):
-    pass
-
-
 class LFUCache:
     def __init__(self, capacity: int):
         self.capacity = capacity  # Max items
